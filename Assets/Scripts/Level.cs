@@ -44,13 +44,23 @@ public class Level : MonoBehaviour
 
 	void Update()
 	{
+		// Render Player Field of View
 		var polygons = walls.Select(wall => wall.points).ToArray();
 		var segments = VisibilityPolygonCSharp<Vector2>.ConvertToSegments(polygons);
+		// `player.transform.right` is the 'front' direction
+		// Cheesy hack to restrict player's field of view
+		segments.Add(new Segment<Vector2>(
+			player.transform.position - player.transform.right * 0.001F,
+			player.transform.position + player.transform.right + player.transform.up
+		));
+		segments.Add(new Segment<Vector2>(
+			player.transform.position - player.transform.right * 0.001F,
+			player.transform.position + player.transform.right - player.transform.up
+		));
+		
 		segments = visibilityPolygonCalculator.BreakIntersections(segments);
 		var visibility = visibilityPolygonCalculator.Compute(player.transform.position, segments);
-
-		// Revert relative positioning
-		visibility = visibility.Select(point => (Vector2)player.transform.InverseTransformPoint(point)).ToList();
+		
 		// Triangulate to render. Too low level for my taste, honestly.
 		Triangulator tr = new Triangulator(visibility.ToArray());
 		int [] triangles = tr.Triangulate();
@@ -58,10 +68,5 @@ public class Level : MonoBehaviour
 		player.mesh.vertices = visibility.Select(v => (Vector3)v).ToArray();
 		player.mesh.triangles = triangles;
 		player.mesh.RecalculateNormals();
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
-		
 	}
 }
