@@ -46,8 +46,9 @@ public class Level : MonoBehaviour
 	{
 		var polygons = walls.Select(wall => wall.points).ToArray();
 		var segments = VisibilityPolygonCSharp<Vector2>.ConvertToSegments(polygons);
-		Debug.Log(player.transform.position);
+		segments = visibilityPolygonCalculator.BreakIntersections(segments);
 		var visibility = visibilityPolygonCalculator.Compute(player.transform.position, segments);
+
 		// Revert relative positioning
 		visibility = visibility.Select(point => (Vector2)player.transform.InverseTransformPoint(point)).ToList();
 		// Triangulate to render. Too low level for my taste, honestly.
