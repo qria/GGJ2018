@@ -18,7 +18,7 @@ public class LaserGun : MonoBehaviour
 		lineRenderer = GetComponent<LineRenderer>();
 		// I could not figure out how to set up line material in the
 		// unity editor.
-		lineRenderer.material = new Material (Shader.Find("Particles/Additive"));
+//		lineRenderer.material = new Material (Shader.Find("Particles/Additive"));  // This don't work in webgl
 		lineRenderer.SetColors(Color.white, Color.white);
 
 		isShooting = false;
