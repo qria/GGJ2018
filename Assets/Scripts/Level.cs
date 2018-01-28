@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,6 +30,7 @@ public class Level : MonoBehaviour
 {
 	public List<Wall> walls;
 	public Player player;
+	public Turret turret;
 	
 	private VisibilityPolygonCSharp<Vector2> visibilityPolygonCalculator;
 	private Text gameOverText;
@@ -40,6 +39,7 @@ public class Level : MonoBehaviour
 	{
 		walls = new List<Wall>(FindObjectsOfType<Wall>());
 		player = FindObjectOfType<Player>();
+		turret = FindObjectOfType<Turret>();
 		
 		visibilityPolygonCalculator = new VisibilityPolygonCSharp<Vector2>(new Vector2Adapter());
 
@@ -73,6 +73,22 @@ public class Level : MonoBehaviour
 		player.mesh.vertices = visibility.Select(v => (Vector3)v).ToArray();
 		player.mesh.triangles = triangles;
 		player.mesh.RecalculateNormals();
+		
+		if (turret.enabled)
+		{
+			// Render Turret Field of View
+			polygons = walls.Select(wall => wall.points).ToArray();
+			segments = VisibilityPolygonCSharp<Vector2>.ConvertToSegments(polygons);
+			segments = visibilityPolygonCalculator.BreakIntersections(segments);
+			var turretVisibility = visibilityPolygonCalculator.Compute(turret.transform.position, segments);
+
+			tr = new Triangulator(turretVisibility.ToArray());
+			triangles = tr.Triangulate();
+			turret.mesh.Clear();
+			turret.mesh.vertices = turretVisibility.Select(v => (Vector3)v).ToArray();
+			turret.mesh.triangles = triangles;
+			turret.mesh.RecalculateNormals();
+		}
 	}
 
 	public void GameOver()

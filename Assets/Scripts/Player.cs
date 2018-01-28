@@ -2,9 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.Timeline;
-using UnityEngine.XR.WSA.WebCam;
 
 public class Player : MonoBehaviour {
 
@@ -52,7 +49,7 @@ public class Player : MonoBehaviour {
 			RaycastHit2D hit = Physics2D.Raycast(transform.position, facingDirection);
 			turret.enabled = true;
 			turret.renderer.enabled = true;
-			turret.transform.position = hit.point;
+			turret.transform.position = hit.point - facingDirection * 0.01f;  // Slightly in front of wall
 		}
 	}
 	
