@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Timeline;
+using UnityEngine.XR.WSA.WebCam;
 
 public class Player : MonoBehaviour {
 
@@ -16,6 +17,8 @@ public class Player : MonoBehaviour {
 	private Rigidbody2D rigidbody;
 	private SpriteRenderer renderer;
 	private Level level;
+
+	private Turret turret;
 	
 	void Start ()
 	{
@@ -25,17 +28,31 @@ public class Player : MonoBehaviour {
 		meshFilter.mesh = mesh;
 
 		level = FindObjectOfType<Level>();
+		turret = FindObjectOfType<Turret>();
+		turret.enabled = false;
+		turret.renderer.enabled = false;
 	}
 
 	void Update()
 	{
+		
+		var facingRadian = (float)(transform.rotation.eulerAngles.z / 180 * Math.PI);
+		var facingDirection = new Vector2(Mathf.Cos(facingRadian), Mathf.Sin(facingRadian));
+		
 		if (Input.GetButton("Fire1"))
 		{
-			// Note laser's path is ddetermined at the start of the shooting
+			// Note laser's path is determined at the start of the shooting
 			// to prevent "scrubbing" cheats
-			var facingRadian = (float)(transform.rotation.eulerAngles.z / 180 * Math.PI);
-			var facingDirection = new Vector2(Mathf.Cos(facingRadian), Mathf.Sin(facingRadian));
 			laserGun.fire(facingDirection);
+		}
+		
+		// Fire Turret
+		if (Input.GetKeyDown("space"))
+		{
+			RaycastHit2D hit = Physics2D.Raycast(transform.position, facingDirection);
+			turret.enabled = true;
+			turret.renderer.enabled = true;
+			turret.transform.position = hit.point;
 		}
 	}
 	
@@ -57,6 +74,7 @@ public class Player : MonoBehaviour {
 		float AngleRad = Mathf.Atan2(mousePosition.y - transform.position.y, mousePosition.x - transform.position.x);
 		float AngleDeg = 180 / Mathf.PI * AngleRad;
 		transform.rotation = Quaternion.Euler(0, 0, AngleDeg);
+		
 	}
 	
 	public void Die()
