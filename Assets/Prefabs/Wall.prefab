@@ -26,7 +26,7 @@ GameObject:
   - component: {fileID: 50565374295404200}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -38,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1254095695741202}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.64, y: 0.64, z: 0}
+  m_LocalPosition: {x: 4.3, y: -1.46, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -129,9 +129,18 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.25218678, y: 1.1913569}
-      - {x: -1.1333873, y: -3.023516}
-      - {x: 1.9357414, y: -2.7667627}
+    - - {x: -5.782736, y: 4.7252913}
+      - {x: -6.368629, y: 4.380192}
+      - {x: -6.3394265, y: -1.0471213}
+      - {x: -5.6705174, y: -1.4737806}
+      - {x: -3.47539, y: -1.4301677}
+      - {x: -3.4606209, y: 1.1494277}
+      - {x: -2.0663288, y: 1.143471}
+      - {x: -2.0454268, y: -1.4371367}
+      - {x: 0.04731083, y: -1.4391208}
+      - {x: 0.61803865, y: -1.2064674}
+      - {x: 0.69383955, y: 4.296633}
+      - {x: 0.15905285, y: 4.696497}
 --- !u!114 &114787237866417502
 MonoBehaviour:
   m_ObjectHideFlags: 1

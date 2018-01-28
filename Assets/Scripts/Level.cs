@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using VisibilityPolygonCSharp;
 
 public class Vector2Adapter : PointAdapter<Vector2>
@@ -29,10 +30,11 @@ public class Vector2Adapter : PointAdapter<Vector2>
 
 public class Level : MonoBehaviour
 {
-	private List<Wall> walls;
-	private Player player;
+	public List<Wall> walls;
+	public Player player;
 	
 	private VisibilityPolygonCSharp<Vector2> visibilityPolygonCalculator;
+	private Text gameOverText;
 	
 	void Start ()
 	{
@@ -40,6 +42,9 @@ public class Level : MonoBehaviour
 		player = FindObjectOfType<Player>();
 		
 		visibilityPolygonCalculator = new VisibilityPolygonCSharp<Vector2>(new Vector2Adapter());
+
+		gameOverText = FindObjectOfType<Text>();
+		gameOverText.enabled = false;
 	}
 
 	void Update()
@@ -68,5 +73,10 @@ public class Level : MonoBehaviour
 		player.mesh.vertices = visibility.Select(v => (Vector3)v).ToArray();
 		player.mesh.triangles = triangles;
 		player.mesh.RecalculateNormals();
+	}
+
+	public void GameOver()
+	{
+		gameOverText.enabled = true;
 	}
 }
